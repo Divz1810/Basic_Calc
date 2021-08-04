@@ -1,25 +1,58 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Input from './components/Input';
+import Operator from './components/Operator';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component{
+
+  state= {
+    currInput:"",
+  }
+
+  HandleOp= (val)=>{
+
+    if(val==="="){
+      this.calculate();
+    }else if(val==="C"){
+      this.clear();
+    }else{
+      let newval= this.state.currInput+val;
+      this.setState({currInput: newval});
+    }
+  }
+
+  clear= ()=>{
+    this.setState({currInput: ""});
+  }
+
+  calculate =() =>{
+            var checkResult = ''
+            checkResult = this.state.currInput
+
+        try {
+            this.setState({
+                // eslint-disable-next-line
+                currInput: (eval(checkResult) || "" ) + ""
+            })
+        } catch (e) {
+            this.setState({
+                currInput: "error"
+            })
+
+        }
+  }
+
+
+
+  render=()=>{
+    return (
+      <div className="calc">
+        <h2>Calculator</h2>
+        <Input currInput={this.state.currInput} />
+        <Operator HandleOp={this.HandleOp} />
+      </div>
+    );
+  }
 }
 
 export default App;
